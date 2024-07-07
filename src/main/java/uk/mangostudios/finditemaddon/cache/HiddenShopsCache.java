@@ -37,17 +37,17 @@ public class HiddenShopsCache {
         Shop shop = QuickShopHandler.getInstance().findShopAtLocation(shopLocation);
 
         if (shop == null) {
-            player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().NOT_LOOKING_AT_SHOP_MSG));
+            player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().NOT_LOOKING_AT_SHOP_MSG));
             return;
         }
 
         if (!(shop.getOwner().getUniqueId().equals(player.getUniqueId()))) {
-            player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().NOT_YOUR_SHOP_MSG));
+            player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().NOT_YOUR_SHOP_MSG));
             return;
         }
 
         hiddenShops.put(player.getUniqueId(), finePosition);
-        player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().HIDDEN_SHOP_MSG));
+        player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().HIDDEN_SHOP_MSG));
     }
 
     public void unhideShop(Player player, @Nullable Location shopLocation) {
@@ -56,17 +56,17 @@ public class HiddenShopsCache {
         Shop shop = QuickShopHandler.getInstance().findShopAtLocation(shopLocation);
 
         if (shop == null) {
-            player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().NOT_LOOKING_AT_SHOP_MSG));
+            player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().NOT_LOOKING_AT_SHOP_MSG));
             return;
         }
 
         if (!(shop.getOwner().getUniqueId().equals(player.getUniqueId()))) {
-            player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().NOT_YOUR_SHOP_MSG));
+            player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().NOT_YOUR_SHOP_MSG));
             return;
         }
 
         hiddenShops.remove(player.getUniqueId(), finePosition);
-        player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().UNHIDDEN_SHOP_MSG));
+        player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().UNHIDDEN_SHOP_MSG));
     }
 
     public boolean isShopHidden(Player player, Location shopLocation) {
