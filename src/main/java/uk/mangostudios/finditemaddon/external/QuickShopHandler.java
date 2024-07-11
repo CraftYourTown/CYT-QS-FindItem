@@ -195,13 +195,8 @@ public class QuickShopHandler {
         return com.ghostchu.quickshop.util.Util.getSignMaterial();
     }
 
-    public com.ghostchu.quickshop.api.shop.Shop findShopAtBlock(Block block) {
-        Location loc = new Location(block.getWorld(), block.getX(), block.getY(), block.getZ());
-        return api.getShopManager().getShop(loc);
-    }
-
     public com.ghostchu.quickshop.api.shop.Shop findShopAtLocation(Location loc) {
-        return api.getShopManager().getShop(loc);
+        return api.getShopManager().getShopIncludeAttached(loc);
     }
 
     public boolean isShopOwnerCommandRunner(Player player, com.ghostchu.quickshop.api.shop.Shop shop) {
