@@ -1,15 +1,16 @@
 package uk.mangostudios.finditemaddon.cache;
 
 import com.ghostchu.quickshop.api.shop.Shop;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import uk.mangostudios.finditemaddon.FindItemAddOn;
 import uk.mangostudios.finditemaddon.external.QuickShopHandler;
 import uk.mangostudios.finditemaddon.storage.HiddenShopsStorage;
 import uk.mangostudios.finditemaddon.storage.impl.FinePosition;
 import uk.mangostudios.finditemaddon.util.Colourify;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +19,7 @@ public class HiddenShopsCache {
 
     private static HiddenShopsCache instance;
 
-    private final Map<UUID, FinePosition> hiddenShops = new ConcurrentHashMap<>();
+    private final Map<UUID, List<FinePosition>> hiddenShops = new ConcurrentHashMap<>();
     private final HiddenShopsStorage hiddenShopsStorage;
 
     public HiddenShopsCache(FindItemAddOn plugin) {
@@ -46,7 +47,7 @@ public class HiddenShopsCache {
             return;
         }
 
-        hiddenShops.put(player.getUniqueId(), finePosition);
+        hiddenShops.computeIfAbsent(player.getUniqueId(), k -> List.of()).add(finePosition);
         player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().HIDDEN_SHOP_MSG));
     }
 
@@ -65,13 +66,16 @@ public class HiddenShopsCache {
             return;
         }
 
-        hiddenShops.remove(player.getUniqueId(), finePosition);
+        hiddenShops.get(player.getUniqueId()).remove(finePosition);
         player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().UNHIDDEN_SHOP_MSG));
     }
 
     public boolean isShopHidden(Player player, Location shopLocation) {
-        FinePosition finePosition = hiddenShops.get(player.getUniqueId());
-        return finePosition != null && finePosition.equals(new FinePosition(shopLocation.getX(), shopLocation.getY(), shopLocation.getZ(), shopLocation.getWorld().getName()));
+        if (!hiddenShops.containsKey(player.getUniqueId())) return false;
+        for (FinePosition finePosition : hiddenShops.get(player.getUniqueId())) {
+            return finePosition.equals(new FinePosition(shopLocation.getX(), shopLocation.getY(), shopLocation.getZ(), shopLocation.getWorld().getName()));
+        }
+        return false;
     }
 
     public static HiddenShopsCache getInstance() {
