@@ -24,17 +24,16 @@ import com.ghostchu.quickshop.api.shop.permission.BuiltInShopPermission;
 import com.ghostchu.quickshop.util.Util;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import uk.mangostudios.finditemaddon.FindItemAddOn;
-import uk.mangostudios.finditemaddon.gui.impl.ShopItem;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import uk.mangostudios.finditemaddon.FindItemAddOn;
+import uk.mangostudios.finditemaddon.gui.impl.ShopItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,7 +85,7 @@ public class QuickShopHandler {
                     && (toBuy ? shopIterator.isSelling() : shopIterator.isBuying()))
             ) {
                 int stockOrSpace = (toBuy ? getRemainingStockOrSpaceFromShopCache(shopIterator, true) : getRemainingStockOrSpaceFromShopCache(shopIterator, false));
-                if (checkIfShopToBeIgnoredForFullOrEmpty(stockOrSpace)) {
+                if (stockOrSpace < 0) {
                     continue;
                 }
 
@@ -135,7 +134,7 @@ public class QuickShopHandler {
                     && (toBuy ? shopIterator.isSelling() : shopIterator.isBuying())
             ) {
                 int stockOrSpace = (toBuy ? getRemainingStockOrSpaceFromShopCache(shopIterator, true) : getRemainingStockOrSpaceFromShopCache(shopIterator, false));
-                if (checkIfShopToBeIgnoredForFullOrEmpty(stockOrSpace)) {
+                if (stockOrSpace < 0) {
                     continue;
                 }
 
@@ -209,21 +208,6 @@ public class QuickShopHandler {
 
     public UUID convertNameToUuid(String playerName) {
         return api.getPlayerFinder().name2Uuid(playerName);
-    }
-
-    /**
-     * If IGNORE_EMPTY_CHESTS is true -> do not add empty stock or space
-     * If to buy -> If shop has no stock -> based on ignore flag, decide to include it or not
-     * If to sell -> If shop has no space -> based on ignore flag, decide to include it or not
-     *
-     * @return If shop needs to be ignored from list
-     */
-    private boolean checkIfShopToBeIgnoredForFullOrEmpty(int stockOrSpace) {
-        boolean ignoreEmptyChests = FindItemAddOn.getConfigProvider().IGNORE_EMPTY_CHESTS;
-        if (ignoreEmptyChests) {
-            return stockOrSpace == 0;
-        }
-        return false;
     }
 
     private int getRemainingStockOrSpaceFromShopCache(com.ghostchu.quickshop.api.shop.Shop shop, boolean fetchRemainingStock) {

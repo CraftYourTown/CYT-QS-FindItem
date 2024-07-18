@@ -36,11 +36,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PlayerWarpsUtil {
 
     @Nullable
-    public Warp findNearestWarp(Location shopLocation, UUID shopOwner) {
+    public Warp findNearestWarp(Location shopLocation, @Nullable UUID shopOwner) {
         List<Warp> playersWarps = PlayerWarpsHandler.getAllWarps().stream()
                 .filter(warp -> warp.getWarpLocation().getWorld() != null)
                 .filter(warp -> warp.getWarpLocation().getWorld().equals(shopLocation.getWorld().getName()))
-                .filter(warp -> warp.getWarpPlayer().getUUID().equals(shopOwner))
+                .filter(warp -> shopOwner != null && warp.getWarpPlayer().getUUID().equals(shopOwner)) // If the shop owner is not null, filter by the shop owner, else ignore
                 .toList();
 
         if (!playersWarps.isEmpty()) {
@@ -56,6 +56,11 @@ public class PlayerWarpsUtil {
                     ), warp));
 
             for (Map.Entry<Double, Warp> doubleWarpEntry : warpDistanceMap.entrySet()) {
+                // Is the distance less than 200 blocks?
+                if (doubleWarpEntry.getKey() > 200) {
+                    continue;
+                }
+
                 // Is the warp locked?
                 if (doubleWarpEntry.getValue().isWarpLocked()) {
                     continue;

@@ -62,8 +62,18 @@ public class ShopsGui {
             ItemStack itemStack = shopItem.item().clone();
             Warp nearestWarp = this.getNearestWarp(shopItem.shopOwner(), shopItem.shopLocation());
 
+            // If no warp, try to find the nearest warp, if still not found, skip
+            if (nearestWarp == null) {
+                Warp warp = this.getNearestWarp(shopItem.shopLocation());
+                if (warp != null) {
+                    nearestWarp = warp;
+                } else {
+                    return;
+                }
+            }
+
             // Skip if the warp is locked
-            if (nearestWarp != null && nearestWarp.isWarpLocked()) return;
+            if (nearestWarp.isWarpLocked()) return;
 
             // Is the warp hidden?
             if (HiddenShopsCache.getInstance().isShopHidden(player, shopItem.shopLocation())) {
@@ -84,15 +94,16 @@ public class ShopsGui {
                         .replace("<warp>", nearestWarp == null ? "No warp found" : nearestWarp.getWarpDisplayName()));
             }
 
+            Warp finalNearestWarp = nearestWarp;
             gui.addItem(ItemBuilder.from(itemStack)
                     .name(itemStack.displayName().decoration(TextDecoration.ITALIC, false))
                     .lore(Colourify.colour(lore))
                     .asGuiItem(inventoryClickEvent -> {
-                        if (PlayerWarpsUtil.isPlayerBanned(nearestWarp, player)) return;
+                        if (PlayerWarpsUtil.isPlayerBanned(finalNearestWarp, player)) return;
                         player.closeInventory();
 
                         Location safeLocationAroundShop = LocationUtil.findSafeLocationAroundShop(shopItem.shopLocation());
-                        Location teleportLocation = safeLocationAroundShop == null ? (nearestWarp == null ? shopItem.shopLocation() : nearestWarp.getWarpLocation().getLocation()) : safeLocationAroundShop;
+                        Location teleportLocation = safeLocationAroundShop == null ? (finalNearestWarp == null ? shopItem.shopLocation() : finalNearestWarp.getWarpLocation().getLocation()) : safeLocationAroundShop;
                         player.teleportAsync(teleportLocation);
                     }));
         });
@@ -104,6 +115,10 @@ public class ShopsGui {
 
     private @Nullable Warp getNearestWarp(UUID shopOwner, Location location) {
         return new PlayerWarpsUtil().findNearestWarp(location, shopOwner);
+    }
+
+    private @Nullable Warp getNearestWarp(Location location) {
+        return new PlayerWarpsUtil().findNearestWarp(location, null);
     }
 
     private ItemStack getMaterial(String material) {
