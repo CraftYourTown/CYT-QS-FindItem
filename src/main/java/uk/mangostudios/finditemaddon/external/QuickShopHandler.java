@@ -85,7 +85,7 @@ public class QuickShopHandler {
                     && (toBuy ? shopIterator.isSelling() : shopIterator.isBuying()))
             ) {
                 int stockOrSpace = (toBuy ? getRemainingStockOrSpaceFromShopCache(shopIterator, true) : getRemainingStockOrSpaceFromShopCache(shopIterator, false));
-                if (stockOrSpace < 0) {
+                if (stockOrSpace <= 0) {
                     continue;
                 }
 
@@ -134,7 +134,7 @@ public class QuickShopHandler {
                     && (toBuy ? shopIterator.isSelling() : shopIterator.isBuying())
             ) {
                 int stockOrSpace = (toBuy ? getRemainingStockOrSpaceFromShopCache(shopIterator, true) : getRemainingStockOrSpaceFromShopCache(shopIterator, false));
-                if (stockOrSpace < 0) {
+                if (stockOrSpace <= 0) {
                     continue;
                 }
 
