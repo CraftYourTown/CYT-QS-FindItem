@@ -56,8 +56,8 @@ public class PlayerWarpsUtil {
                     ), warp));
 
             for (Map.Entry<Double, Warp> doubleWarpEntry : warpDistanceMap.entrySet()) {
-                // Is the distance less than 200 blocks?
-                if (doubleWarpEntry.getKey() > 200) {
+                // Is the distance less than 500 blocks?
+                if (doubleWarpEntry.getKey() > 500) {
                     continue;
                 }
 

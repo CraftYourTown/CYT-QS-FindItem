@@ -62,7 +62,8 @@ public class ShopsGui {
             ItemStack itemStack = shopItem.item().clone();
             Warp nearestWarp = this.getNearestWarp(shopItem.shopOwner(), shopItem.shopLocation());
 
-            // If no warp, try to find the nearest warp, if still not found, skip
+            // If no warp nearby owned by shop owner, try to find the nearest warp (within 200 blocks),
+            // if still not found, skip iteration
             if (nearestWarp == null) {
                 Warp warp = this.getNearestWarp(shopItem.shopLocation());
                 if (warp != null) {

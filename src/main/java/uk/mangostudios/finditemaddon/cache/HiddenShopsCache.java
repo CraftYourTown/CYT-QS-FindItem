@@ -32,6 +32,19 @@ public class HiddenShopsCache {
         hiddenShopsStorage.saveAll(hiddenShops);
     }
 
+    public void hideAllShops(Player player) {
+        QuickShopHandler.getInstance().getAllShopsFor(player).forEach(shop -> {
+            if (!(shop.getOwner().getUniqueId() == player.getUniqueId())) return;
+            hiddenShops.computeIfAbsent(player.getUniqueId(), k -> List.of()).add(new FinePosition(shop.getLocation().getX(), shop.getLocation().getY(), shop.getLocation().getZ(), shop.getLocation().getWorld().getName()));
+        });
+        player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().HIDDEN_ALL_SHOPS_MSG));
+    }
+
+    public void unhideAllShops(Player player) {
+        hiddenShops.remove(player.getUniqueId());
+        player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().UNHIDDEN_ALL_SHOPS_MSG));
+    }
+
     public void hideShop(Player player, @Nullable Location shopLocation) {
         if (shopLocation == null) shopLocation = player.getTargetBlock(null, 5).getLocation();
         FinePosition finePosition = new FinePosition(shopLocation.getX(), shopLocation.getY(), shopLocation.getZ(), shopLocation.getWorld().getName());
@@ -42,7 +55,7 @@ public class HiddenShopsCache {
             return;
         }
 
-        if (!(shop.getOwner().getUniqueId().equals(player.getUniqueId()))) {
+        if (!(shop.getOwner().getUniqueId() == player.getUniqueId())) {
             player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().NOT_YOUR_SHOP_MSG));
             return;
         }
@@ -61,7 +74,7 @@ public class HiddenShopsCache {
             return;
         }
 
-        if (!(shop.getOwner().getUniqueId().equals(player.getUniqueId()))) {
+        if (!(shop.getOwner().getUniqueId() == player.getUniqueId())) {
             player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().NOT_YOUR_SHOP_MSG));
             return;
         }

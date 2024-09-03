@@ -9,6 +9,8 @@ find-item-command:
   hidden-shop-message: <red>This shop is now hidden! Un-hide it from /finditem manage
   not-your-shop-message: <red>This is not your shop!
   unhidden-shop-message: <green>This shop is now unhidden!
+  hidden-all-shops-message: <green>All your shops are now hidden!
+  unhidden-all-shops-message: <green>All your shops are now unhidden!
 shop-sorting-method: 2
 search-loaded-shops-only: false
 shop-search-gui-title: 'Shop Search: <matcher>'

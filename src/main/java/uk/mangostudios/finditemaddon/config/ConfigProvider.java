@@ -39,6 +39,8 @@ public class ConfigProvider {
     public final String HIDDEN_SHOP_MSG = ConfigManager.get().getString(FIND_ITEM_COMMAND + "hidden-shop-message");
     public final String NOT_YOUR_SHOP_MSG = ConfigManager.get().getString(FIND_ITEM_COMMAND + "not-your-shop-message");
     public final String UNHIDDEN_SHOP_MSG = ConfigManager.get().getString(FIND_ITEM_COMMAND + "unhidden-shop-message");
+    public final String HIDDEN_ALL_SHOPS_MSG = ConfigManager.get().getString(FIND_ITEM_COMMAND + "hidden-all-shops-message");
+    public final String UNHIDDEN_ALL_SHOPS_MSG = ConfigManager.get().getString(FIND_ITEM_COMMAND + "unhidden-all-shops-message");
 
     // GUI
     public final int SHOP_SORTING_METHOD = ConfigManager.get().getInt("shop-sorting-method");

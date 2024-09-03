@@ -22,6 +22,7 @@ import uk.mangostudios.finditemaddon.cache.HiddenShopsCache;
 import uk.mangostudios.finditemaddon.commands.CmdExecutorHandler;
 import uk.mangostudios.finditemaddon.commands.CommandManager;
 import uk.mangostudios.finditemaddon.commands.impl.BuyCommand;
+import uk.mangostudios.finditemaddon.commands.impl.HideAllShopsCommand;
 import uk.mangostudios.finditemaddon.commands.impl.HideShopCommands;
 import uk.mangostudios.finditemaddon.commands.impl.ReloadCommand;
 import uk.mangostudios.finditemaddon.commands.impl.SellCommand;
@@ -92,7 +93,8 @@ public final class FindItemAddOn extends JavaPlugin {
                 new BuyCommand(cmdExecutorHandler),
                 new SellCommand(cmdExecutorHandler),
                 new ReloadCommand(cmdExecutorHandler),
-                new HideShopCommands()
+                new HideShopCommands(),
+                new HideAllShopsCommand()
         );
     }
 
