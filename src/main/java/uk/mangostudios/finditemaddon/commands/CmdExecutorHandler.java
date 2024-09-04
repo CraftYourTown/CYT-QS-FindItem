@@ -75,6 +75,7 @@ public class CmdExecutorHandler {
         ConfigManager.reloadConfig();
         ConfigManager.saveConfig();
         FindItemAddOn.initConfigProvider();
+        QuickShopHandler.getInstance().reload();
         commandSender.sendMessage(Colourify.colour("<green>Plugin reloaded!"));
     }
 }

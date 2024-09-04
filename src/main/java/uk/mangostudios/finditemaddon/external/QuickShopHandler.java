@@ -65,6 +65,13 @@ public class QuickShopHandler {
         instance = this;
     }
 
+    public void reload() {
+        this.searchedItemStacksToBuy.invalidateAll();
+        this.searchedStringsToBuy.invalidateAll();
+        this.searchedItemStacksToSell.invalidateAll();
+        this.searchedStringsToSell.invalidateAll();
+    }
+
     public List<ShopItem> findItemBasedOnTypeFromAllShops(ItemStack item, boolean toBuy, Player searchingPlayer) {
         if (toBuy) {
             if (searchedItemStacksToBuy.getIfPresent(item) != null) {
