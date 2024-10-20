@@ -21,11 +21,11 @@ package uk.mangostudios.finditemaddon.util;
 import com.olziedev.playerwarps.api.PlayerWarpsAPI;
 import com.olziedev.playerwarps.api.player.WBanned;
 import com.olziedev.playerwarps.api.warp.Warp;
-import uk.mangostudios.finditemaddon.external.PlayerWarpsHandler;
-import uk.mangostudios.finditemaddon.FindItemAddOn;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import uk.mangostudios.finditemaddon.FindItemAddOn;
+import uk.mangostudios.finditemaddon.external.PlayerWarpsHandler;
 
 import java.util.List;
 import java.util.Map;
@@ -40,34 +40,39 @@ public class PlayerWarpsUtil {
         List<Warp> playersWarps = PlayerWarpsHandler.getAllWarps().stream()
                 .filter(warp -> warp.getWarpLocation().getWorld() != null)
                 .filter(warp -> warp.getWarpLocation().getWorld().equals(shopLocation.getWorld().getName()))
-                .filter(warp -> shopOwner != null && warp.getWarpPlayer().getUUID().equals(shopOwner)) // If the shop owner is not null, filter by the shop owner, else ignore
+                .filter(warp -> shopOwner == null || warp.getWarpPlayer().getUUID().equals(shopOwner))
                 .toList();
 
-        if (!playersWarps.isEmpty()) {
-            Map<Double, Warp> warpDistanceMap = new TreeMap<>();
-            playersWarps.forEach(warp ->
-                    warpDistanceMap.put(LocationUtil.calculateDistance3D(
-                            shopLocation.getX(),
-                            shopLocation.getY(),
-                            shopLocation.getZ(),
-                            warp.getWarpLocation().getX(),
-                            warp.getWarpLocation().getY(),
-                            warp.getWarpLocation().getZ()
-                    ), warp));
+        if (playersWarps.isEmpty()) { // If no warps found for the shop owner, search for all warps
+            playersWarps = PlayerWarpsHandler.getAllWarps().stream()
+                    .filter(warp -> warp.getWarpLocation().getWorld() != null)
+                    .filter(warp -> warp.getWarpLocation().getWorld().equals(shopLocation.getWorld().getName()))
+                    .toList();
+        }
 
-            for (Map.Entry<Double, Warp> doubleWarpEntry : warpDistanceMap.entrySet()) {
-                // Is the distance less than 500 blocks?
-                if (doubleWarpEntry.getKey() > 500) {
-                    continue;
-                }
+        Map<Double, Warp> warpDistanceMap = new TreeMap<>();
+        playersWarps.forEach(warp ->
+                warpDistanceMap.put(LocationUtil.calculateDistance3D(
+                        shopLocation.getX(),
+                        shopLocation.getY(),
+                        shopLocation.getZ(),
+                        warp.getWarpLocation().getX(),
+                        warp.getWarpLocation().getY(),
+                        warp.getWarpLocation().getZ()
+                ), warp));
 
-                // Is the warp locked?
-                if (doubleWarpEntry.getValue().isWarpLocked()) {
-                    continue;
-                }
-
-                return doubleWarpEntry.getValue();
+        for (Map.Entry<Double, Warp> doubleWarpEntry : warpDistanceMap.entrySet()) {
+            // Is the distance less than 500 blocks?
+            if (doubleWarpEntry.getKey() > 500) {
+                continue;
             }
+
+            // Is the warp locked?
+            if (doubleWarpEntry.getValue().isWarpLocked()) {
+                continue;
+            }
+
+            return doubleWarpEntry.getValue();
         }
 
         return null;
