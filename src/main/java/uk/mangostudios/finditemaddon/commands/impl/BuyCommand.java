@@ -1,12 +1,12 @@
 package uk.mangostudios.finditemaddon.commands.impl;
 
-import uk.mangostudios.finditemaddon.commands.CmdExecutorHandler;
-import uk.mangostudios.finditemaddon.FindItemAddOn;
-import uk.mangostudios.finditemaddon.util.Colourify;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Greedy;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
+import uk.mangostudios.finditemaddon.FindItemAddOn;
+import uk.mangostudios.finditemaddon.commands.CmdExecutorHandler;
+import uk.mangostudios.finditemaddon.util.Colourify;
 
 public class BuyCommand extends AbstractCommand {
 

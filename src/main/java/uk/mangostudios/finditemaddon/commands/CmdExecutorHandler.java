@@ -18,17 +18,17 @@
  */
 package uk.mangostudios.finditemaddon.commands;
 
-import uk.mangostudios.finditemaddon.config.ConfigManager;
-import uk.mangostudios.finditemaddon.FindItemAddOn;
-import uk.mangostudios.finditemaddon.gui.ShopsGui;
-import uk.mangostudios.finditemaddon.gui.impl.ShopItem;
-import uk.mangostudios.finditemaddon.external.QuickShopHandler;
-import uk.mangostudios.finditemaddon.util.Colourify;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import uk.mangostudios.finditemaddon.FindItemAddOn;
+import uk.mangostudios.finditemaddon.config.ConfigManager;
+import uk.mangostudios.finditemaddon.external.QuickShopHandler;
+import uk.mangostudios.finditemaddon.gui.ShopsGui;
+import uk.mangostudios.finditemaddon.gui.impl.ShopItem;
+import uk.mangostudios.finditemaddon.util.Colourify;
 
 import java.util.List;
 

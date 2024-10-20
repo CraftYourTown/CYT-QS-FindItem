@@ -18,6 +18,10 @@
  */
 package uk.mangostudios.finditemaddon;
 
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 import uk.mangostudios.finditemaddon.cache.HiddenShopsCache;
 import uk.mangostudios.finditemaddon.commands.CmdExecutorHandler;
 import uk.mangostudios.finditemaddon.commands.CommandManager;
@@ -27,17 +31,13 @@ import uk.mangostudios.finditemaddon.commands.impl.HideAllShopsCommand;
 import uk.mangostudios.finditemaddon.commands.impl.HideShopCommands;
 import uk.mangostudios.finditemaddon.commands.impl.ReloadCommand;
 import uk.mangostudios.finditemaddon.commands.impl.SellCommand;
-import uk.mangostudios.finditemaddon.config.ConfigProvider;
 import uk.mangostudios.finditemaddon.config.ConfigManager;
+import uk.mangostudios.finditemaddon.config.ConfigProvider;
 import uk.mangostudios.finditemaddon.external.PlayerWarpsHandler;
+import uk.mangostudios.finditemaddon.external.QuickShopHandler;
 import uk.mangostudios.finditemaddon.listener.HeadDatabaseApiListener;
 import uk.mangostudios.finditemaddon.listener.PlayerWarpCreateEventListener;
 import uk.mangostudios.finditemaddon.listener.PlayerWarpRemoveEventListener;
-import uk.mangostudios.finditemaddon.external.QuickShopHandler;
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FindItemAddOn extends JavaPlugin {
 

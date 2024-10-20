@@ -19,11 +19,11 @@
 package uk.mangostudios.finditemaddon.listener;
 
 import com.olziedev.playerwarps.api.events.warp.PlayerWarpRemoveEvent;
-import uk.mangostudios.finditemaddon.external.PlayerWarpsHandler;
-import uk.mangostudios.finditemaddon.FindItemAddOn;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import uk.mangostudios.finditemaddon.FindItemAddOn;
+import uk.mangostudios.finditemaddon.external.PlayerWarpsHandler;
 
 public class PlayerWarpRemoveEventListener implements Listener {
     @EventHandler

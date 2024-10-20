@@ -1,9 +1,9 @@
 package uk.mangostudios.finditemaddon.commands.impl;
 
-import uk.mangostudios.finditemaddon.commands.CmdExecutorHandler;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import uk.mangostudios.finditemaddon.commands.CmdExecutorHandler;
 
 public class ReloadCommand extends AbstractCommand {
 

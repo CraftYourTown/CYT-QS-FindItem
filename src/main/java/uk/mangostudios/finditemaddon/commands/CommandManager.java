@@ -1,8 +1,6 @@
 package uk.mangostudios.finditemaddon.commands;
 
 import io.leangen.geantyref.TypeToken;
-import uk.mangostudios.finditemaddon.commands.impl.AbstractCommand;
-import uk.mangostudios.finditemaddon.FindItemAddOn;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.annotations.AnnotationParser;
@@ -10,6 +8,8 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.incendo.cloud.parser.ArgumentParser;
 import org.incendo.cloud.setting.ManagerSetting;
+import uk.mangostudios.finditemaddon.FindItemAddOn;
+import uk.mangostudios.finditemaddon.commands.impl.AbstractCommand;
 
 import java.lang.reflect.InvocationTargetException;
 

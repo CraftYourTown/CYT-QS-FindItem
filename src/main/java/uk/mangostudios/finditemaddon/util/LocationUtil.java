@@ -18,12 +18,12 @@
  */
 package uk.mangostudios.finditemaddon.util;
 
-import uk.mangostudios.finditemaddon.FindItemAddOn;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
+import uk.mangostudios.finditemaddon.FindItemAddOn;
 
 import java.util.ArrayList;
 import java.util.Arrays;

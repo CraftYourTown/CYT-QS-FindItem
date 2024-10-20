@@ -4,13 +4,6 @@ import com.olziedev.playerwarps.api.warp.Warp;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
-import uk.mangostudios.finditemaddon.FindItemAddOn;
-import uk.mangostudios.finditemaddon.cache.HiddenShopsCache;
-import uk.mangostudios.finditemaddon.listener.HeadDatabaseApiListener;
-import uk.mangostudios.finditemaddon.gui.impl.ShopItem;
-import uk.mangostudios.finditemaddon.util.Colourify;
-import uk.mangostudios.finditemaddon.util.LocationUtil;
-import uk.mangostudios.finditemaddon.util.PlayerWarpsUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -20,6 +13,13 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import uk.mangostudios.finditemaddon.FindItemAddOn;
+import uk.mangostudios.finditemaddon.cache.HiddenShopsCache;
+import uk.mangostudios.finditemaddon.gui.impl.ShopItem;
+import uk.mangostudios.finditemaddon.listener.HeadDatabaseApiListener;
+import uk.mangostudios.finditemaddon.util.Colourify;
+import uk.mangostudios.finditemaddon.util.LocationUtil;
+import uk.mangostudios.finditemaddon.util.PlayerWarpsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,19 +62,10 @@ public class ShopsGui {
             ItemStack itemStack = shopItem.item().clone();
             Warp nearestWarp = this.getNearestWarp(shopItem.shopOwner(), shopItem.shopLocation());
 
-            // If no warp nearby owned by shop owner, try to find the nearest warp (within 200 blocks),
-            // if still not found, skip iteration
-            if (nearestWarp == null) {
-                Warp warp = this.getNearestWarp(shopItem.shopLocation());
-                if (warp != null) {
-                    nearestWarp = warp;
-                } else {
-                    return;
-                }
+            if (nearestWarp != null) {
+                // Skip if the warp is locked
+                if (nearestWarp.isWarpLocked()) return;
             }
-
-            // Skip if the warp is locked
-            if (nearestWarp.isWarpLocked()) return;
 
             // Is the warp hidden?
             if (HiddenShopsCache.getInstance().isShopHidden(player, shopItem.shopLocation())) {
@@ -116,10 +107,6 @@ public class ShopsGui {
 
     private @Nullable Warp getNearestWarp(UUID shopOwner, Location location) {
         return new PlayerWarpsUtil().findNearestWarp(location, shopOwner);
-    }
-
-    private @Nullable Warp getNearestWarp(Location location) {
-        return new PlayerWarpsUtil().findNearestWarp(location, null);
     }
 
     private ItemStack getMaterial(String material) {

@@ -18,9 +18,9 @@
  */
 package uk.mangostudios.finditemaddon.config;
 
-import uk.mangostudios.finditemaddon.FindItemAddOn;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import uk.mangostudios.finditemaddon.FindItemAddOn;
 
 import java.io.File;
 import java.io.IOException;

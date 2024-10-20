@@ -36,18 +36,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PlayerWarpsUtil {
 
     @Nullable
-    public Warp findNearestWarp(Location shopLocation, @Nullable UUID shopOwner) {
+    public Warp findNearestWarp(Location shopLocation, UUID shopOwner) {
         List<Warp> playersWarps = PlayerWarpsHandler.getAllWarps().stream()
                 .filter(warp -> warp.getWarpLocation().getWorld() != null)
                 .filter(warp -> warp.getWarpLocation().getWorld().equals(shopLocation.getWorld().getName()))
-                .filter(warp -> shopOwner == null || warp.getWarpPlayer().getUUID().equals(shopOwner))
+                .filter(warp -> warp.getWarpPlayer().getUUID().equals(shopOwner))
                 .toList();
 
-        if (playersWarps.isEmpty()) { // If no warps found for the shop owner, search for all warps
-            playersWarps = PlayerWarpsHandler.getAllWarps().stream()
-                    .filter(warp -> warp.getWarpLocation().getWorld() != null)
-                    .filter(warp -> warp.getWarpLocation().getWorld().equals(shopLocation.getWorld().getName()))
-                    .toList();
+        if (playersWarps.isEmpty()) {
+            return null;
         }
 
         Map<Double, Warp> warpDistanceMap = new TreeMap<>();
@@ -62,8 +59,8 @@ public class PlayerWarpsUtil {
                 ), warp));
 
         for (Map.Entry<Double, Warp> doubleWarpEntry : warpDistanceMap.entrySet()) {
-            // Is the distance less than 500 blocks?
-            if (doubleWarpEntry.getKey() > 500) {
+            // Is the distance less than 200 blocks?
+            if (doubleWarpEntry.getKey() > 200) {
                 continue;
             }
 
