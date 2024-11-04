@@ -1,5 +1,6 @@
 package uk.mangostudios.finditemaddon.gui;
 
+import com.olziedev.playerwarps.api.warp.WVisit;
 import com.olziedev.playerwarps.api.warp.Warp;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
@@ -92,6 +93,10 @@ public class ShopsGui {
                     .lore(Colourify.colour(lore))
                     .asGuiItem(inventoryClickEvent -> {
                         if (PlayerWarpsUtil.isPlayerBanned(finalNearestWarp, player)) return;
+                        if (finalNearestWarp != null) {
+                            final WVisit warpVisit = finalNearestWarp.getWarpVisit();
+                            warpVisit.setWarpVisits(warpVisit.getWarpVisits() + 1, warpVisit.getPurgedWarpVisits() + 1);
+                        }
                         player.closeInventory();
 
                         Location safeLocationAroundShop = LocationUtil.findSafeLocationAroundShop(shopItem.shopLocation());
