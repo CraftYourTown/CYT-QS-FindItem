@@ -95,7 +95,10 @@ public class ShopsGui {
                         if (PlayerWarpsUtil.isPlayerBanned(finalNearestWarp, player)) return;
                         if (finalNearestWarp != null) {
                             final WVisit warpVisit = finalNearestWarp.getWarpVisit();
-                            warpVisit.setWarpVisits(warpVisit.getWarpVisits() + 1, warpVisit.getPurgedWarpVisits() + 1);
+                            if (!warpVisit.getWarpVisited().contains(player.getUniqueId())) {
+                                warpVisit.getWarpVisited().add(player.getUniqueId());
+                                warpVisit.setWarpVisits(warpVisit.getWarpVisits() + 1, warpVisit.getPurgedWarpVisits() + 1);
+                            }
                         }
                         player.closeInventory();
 
