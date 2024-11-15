@@ -87,14 +87,13 @@ public class ShopsGui {
                         .replace("<warp>", nearestWarp == null ? "No warp found" : nearestWarp.getWarpDisplayName()));
             }
 
-            Warp finalNearestWarp = nearestWarp;
             gui.addItem(ItemBuilder.from(itemStack)
                     .name(itemStack.displayName().decoration(TextDecoration.ITALIC, false))
                     .lore(Colourify.colour(lore))
                     .asGuiItem(inventoryClickEvent -> {
-                        if (PlayerWarpsUtil.isPlayerBanned(finalNearestWarp, player)) return;
-                        if (finalNearestWarp != null) {
-                            final WVisit warpVisit = finalNearestWarp.getWarpVisit();
+                        if (PlayerWarpsUtil.isPlayerBanned(nearestWarp, player)) return;
+                        if (nearestWarp != null) {
+                            final WVisit warpVisit = nearestWarp.getWarpVisit();
                             if (!warpVisit.getWarpVisited().contains(player.getUniqueId())) {
                                 warpVisit.getWarpVisited().add(player.getUniqueId());
                                 warpVisit.setWarpVisits(warpVisit.getWarpVisits() + 1, warpVisit.getPurgedWarpVisits() + 1);
@@ -103,7 +102,7 @@ public class ShopsGui {
                         player.closeInventory();
 
                         Location safeLocationAroundShop = LocationUtil.findSafeLocationAroundShop(shopItem.shopLocation());
-                        Location teleportLocation = safeLocationAroundShop == null ? (finalNearestWarp == null ? shopItem.shopLocation() : finalNearestWarp.getWarpLocation().getLocation()) : safeLocationAroundShop;
+                        Location teleportLocation = safeLocationAroundShop == null ? (nearestWarp == null ? shopItem.shopLocation() : nearestWarp.getWarpLocation().getLocation()) : safeLocationAroundShop;
                         player.teleportAsync(teleportLocation);
                     }));
         });
