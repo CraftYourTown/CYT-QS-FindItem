@@ -12,6 +12,8 @@ find-item-command:
   hidden-all-shops-message: <green>All your shops are now hidden!
   unhidden-all-shops-message: <green>All your shops are now unhidden!
   hand-empty-message: <red>Your hand is empty!
+  not-enough-money-message: <red>You don't have enough cash to teleport - it costs £<price>!
+  cost-to-search: 0
 shop-sorting-method: 2
 search-loaded-shops-only: false
 shop-search-gui-title: 'Shop Search: <matcher>'

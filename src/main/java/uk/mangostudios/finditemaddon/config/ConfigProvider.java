@@ -42,6 +42,8 @@ public class ConfigProvider {
     public final String HIDDEN_ALL_SHOPS_MSG = ConfigManager.get().getString(FIND_ITEM_COMMAND + "hidden-all-shops-message");
     public final String UNHIDDEN_ALL_SHOPS_MSG = ConfigManager.get().getString(FIND_ITEM_COMMAND + "unhidden-all-shops-message");
     public final String HAND_EMPTY_MSG = ConfigManager.get().getString(FIND_ITEM_COMMAND + "hand-empty-message");
+    public final double COST_TO_SEARCH = ConfigManager.get().getDouble(FIND_ITEM_COMMAND + "cost-to-search");
+    public final String NOT_ENOUGH_MONEY_MSG = ConfigManager.get().getString(FIND_ITEM_COMMAND + "not-enough-money-message");
 
     // GUI
     public final int SHOP_SORTING_METHOD = ConfigManager.get().getInt("shop-sorting-method");

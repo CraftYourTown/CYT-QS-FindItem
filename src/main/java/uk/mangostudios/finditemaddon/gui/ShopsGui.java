@@ -62,6 +62,7 @@ public class ShopsGui {
         searchResultList.forEach(shopItem -> {
             ItemStack itemStack = shopItem.item().clone();
             Warp nearestWarp = this.getNearestWarp(shopItem.shopOwner(), shopItem.shopLocation());
+            double costToSearch = FindItemAddOn.getConfigProvider().COST_TO_SEARCH;
 
             if (nearestWarp != null) {
                 // Skip if the warp is locked
@@ -79,6 +80,7 @@ public class ShopsGui {
                         .replace("<price>", String.valueOf(shopItem.shopPrice()))
                         .replace("<stock>", String.valueOf(shopItem.remainingStockOrSpace()))
                         .replace("<owner>", Bukkit.getOfflinePlayer(shopItem.shopOwner()).getName())
+                        .replace("<cost>", String.valueOf(costToSearch))
                         .replace("<location>",
                                 "X: " + shopItem.shopLocation().getBlockX()
                                  + ", Y: " + shopItem.shopLocation().getBlockY()
@@ -91,6 +93,14 @@ public class ShopsGui {
                     .name(itemStack.displayName().decoration(TextDecoration.ITALIC, false))
                     .lore(Colourify.colour(lore))
                     .asGuiItem(inventoryClickEvent -> {
+                        if (costToSearch > 0) {
+                            if (!FindItemAddOn.getInstance().getEconomy().withdrawPlayer(player, costToSearch).transactionSuccess()) {
+                                player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().NOT_ENOUGH_MONEY_MSG
+                                        .replace("<cost>", String.valueOf(costToSearch))));
+                                return;
+                            }
+                        }
+
                         if (PlayerWarpsUtil.isPlayerBanned(nearestWarp, player)) return;
                         if (nearestWarp != null) {
                             final WVisit warpVisit = nearestWarp.getWarpVisit();
