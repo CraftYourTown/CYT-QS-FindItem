@@ -50,7 +50,7 @@ dependencies {
     compileOnly("com.ghostchu:quickshop-api:6.2.0.5")
 
     // TriumphGui
-    implementation("dev.triumphteam:triumph-gui:3.1.7") { exclude("net.kyori") }
+    implementation("dev.triumphteam:triumph-gui:3.1.10") { exclude("net.kyori") }
 
     // Head Database
     compileOnly("com.arcaniax:HeadDatabase-API:1.3.2")
