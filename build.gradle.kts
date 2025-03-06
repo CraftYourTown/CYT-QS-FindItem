@@ -24,7 +24,7 @@ bukkitPluginYaml {
 repositories {
     mavenCentral()
     maven ("https://jitpack.io")
-    maven ("https://papermc.io/repo/repository/maven-public/")
+    maven ("https://repo.papermc.io/repository/maven-public/")
     maven ("https://oss.sonatype.org/content/groups/public/")
     maven ("https://repo.olziedev.com/") // PlayerWarps
     maven ("https://repo.codemc.io/repository/maven-public/") // QuickShop-Hikari
@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     // Paper
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
 
     // Cloud
     implementation("org.incendo:cloud-paper:2.0.0-beta.8")
@@ -60,7 +60,7 @@ dependencies {
 }
 
 indra {
-    javaVersions().target(17)
+    javaVersions().target(21)
 }
 
 tasks {

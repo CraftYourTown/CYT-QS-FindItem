@@ -46,7 +46,7 @@ public class CmdExecutorHandler {
 
         QuickShopHandler quickShopApi = FindItemAddOn.getQsApiInstance();
         Material mat = Material.getMaterial(matcher.toUpperCase());
-        if (mat != null) {
+        if (mat != null && mat.isItem()) {
             List<ShopItem> searchResultList = quickShopApi.findItemBasedOnTypeFromAllShops(new ItemStack(mat), isBuying, player);
             if (!searchResultList.isEmpty()) {
                 ShopsGui.open(player, matcher, searchResultList);
