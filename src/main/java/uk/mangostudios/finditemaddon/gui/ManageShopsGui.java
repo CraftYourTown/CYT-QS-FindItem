@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class ManageShopsGui {
 
@@ -116,7 +117,7 @@ public class ManageShopsGui {
     }
 
     public static void open(Player player) {
-        new ManageShopsGui(player).gui.open(player);
+        CompletableFuture.supplyAsync(() -> new ManageShopsGui(player)).thenAccept(gui -> gui.gui.open(player));
     }
 
     private ItemStack getMaterial(String material) {

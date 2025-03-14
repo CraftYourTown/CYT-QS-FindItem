@@ -25,6 +25,7 @@ import uk.mangostudios.finditemaddon.util.PlayerWarpsUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class ShopsGui {
 
@@ -119,7 +120,7 @@ public class ShopsGui {
     }
 
     public static void open(Player player, String matcher, List<ShopItem> searchResultList) {
-        new ShopsGui(player, matcher, searchResultList).gui.open(player);
+        CompletableFuture.supplyAsync(() -> new ShopsGui(player, matcher, searchResultList)).thenAccept(gui -> gui.gui.open(player));
     }
 
     private @Nullable Warp getNearestWarp(UUID shopOwner, Location location) {

@@ -18,8 +18,10 @@ public class BuyCommand extends AbstractCommand {
 
     @Command("finditem|shopsearch|searchshop to-buy <search>")
     private void onBuy(Player player, @Argument("search") @Greedy String search) {
-        if (search.length() <= 3)
+        if (search.length() <= 3) {
             player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().QUERY_TOO_SHORT_MSG));
+            return;
+        }
 
         this.cmdExecutor.handleShopSearch(true, player, search);
     }
