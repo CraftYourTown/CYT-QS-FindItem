@@ -19,17 +19,34 @@
 package uk.mangostudios.finditemaddon.listener;
 
 import com.olziedev.playerwarps.api.events.warp.PlayerWarpCreateEvent;
+import com.olziedev.playerwarps.api.events.warp.PlayerWarpRemoveEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import uk.mangostudios.finditemaddon.FindItemAddOn;
 import uk.mangostudios.finditemaddon.external.PlayerWarpsHandler;
 
-public class PlayerWarpCreateEventListener implements Listener {
+public class PlayerWarpEventListeners implements Listener {
+    
     @EventHandler
-    public void onPlayerWarpCreate(PlayerWarpCreateEvent event) {
+    public void onCreate(PlayerWarpCreateEvent event) {
         // Issue #24 Fix: Converted updateWarpsOnEventCall() call to async
-        Bukkit.getScheduler().runTaskAsynchronously(FindItemAddOn.getInstance(),
-                () -> PlayerWarpsHandler.updateWarpsOnEventCall(event.getPlayerWarp(), false));
+        this.async(() -> PlayerWarpsHandler.updateWarpsOnEventCall(event.getPlayerWarp(), false));
     }
+
+    @EventHandler
+    public void onDelete(PlayerWarpRemoveEvent event) {
+        // Issue #24 Fix: Converted updateWarpsOnEventCall() call to async
+        this.async(() -> PlayerWarpsHandler.updateWarpsOnEventCall(event.getPlayerWarp(), true));
+    }
+    
+    /**
+     * Complete a specific task asynchronously
+     *
+     * @param task the task to complete
+     */
+    private void async(Runnable task) {
+        Bukkit.getScheduler().runTaskAsynchronously(FindItemAddOn.getInstance(), task);
+    }
+
 }

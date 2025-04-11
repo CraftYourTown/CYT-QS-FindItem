@@ -103,6 +103,7 @@ public class ShopsGui {
                         }
 
                         if (PlayerWarpsUtil.isPlayerBanned(nearestWarp, player)) return;
+                        if (PlayerWarpsUtil.isWarpLocked(nearestWarp, player) ) return; 
                         if (nearestWarp != null) {
                             final WVisit warpVisit = nearestWarp.getWarpVisit();
                             if (!warpVisit.getWarpVisited().contains(player.getUniqueId())) {
@@ -110,6 +111,7 @@ public class ShopsGui {
                                 warpVisit.setWarpVisits(warpVisit.getWarpVisits() + 1, warpVisit.getPurgedWarpVisits() + 1);
                             }
                         }
+                        
                         player.closeInventory();
 
                         Location safeLocationAroundShop = LocationUtil.findSafeLocationAroundShop(shopItem.shopLocation());

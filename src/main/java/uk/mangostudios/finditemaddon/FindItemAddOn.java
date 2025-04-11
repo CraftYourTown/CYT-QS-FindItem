@@ -36,8 +36,7 @@ import uk.mangostudios.finditemaddon.config.ConfigProvider;
 import uk.mangostudios.finditemaddon.external.PlayerWarpsHandler;
 import uk.mangostudios.finditemaddon.external.QuickShopHandler;
 import uk.mangostudios.finditemaddon.listener.HeadDatabaseApiListener;
-import uk.mangostudios.finditemaddon.listener.PlayerWarpCreateEventListener;
-import uk.mangostudios.finditemaddon.listener.PlayerWarpRemoveEventListener;
+import uk.mangostudios.finditemaddon.listener.PlayerWarpEventListeners;
 
 public final class FindItemAddOn extends JavaPlugin {
 
@@ -102,8 +101,7 @@ public final class FindItemAddOn extends JavaPlugin {
 
     private void registerListeners() {
         // Register PlayerWarpsPlugin listeners
-        this.getServer().getPluginManager().registerEvents(new PlayerWarpRemoveEventListener(), this);
-        this.getServer().getPluginManager().registerEvents(new PlayerWarpCreateEventListener(), this);
+        this.getServer().getPluginManager().registerEvents(new PlayerWarpEventListeners(), this);
 
         // Register HeadDatabaseAPI listener
         this.getServer().getPluginManager().registerEvents(new HeadDatabaseApiListener(), this);

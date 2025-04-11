@@ -93,4 +93,24 @@ public class PlayerWarpsUtil {
 
         return isBanned.get();
     }
+
+    /**
+     * Check if a player warp is locked as a player teleports to it
+     *
+     * @param warp   The warp to check
+     * @param player The player who is teleporting (i guess)
+     * @return If the warp is locked
+     */
+    public static boolean isWarpLocked(Warp warp, Player player) {
+        if (warp == null || player == null) return false;
+        AtomicBoolean result = new AtomicBoolean(false);
+
+        PlayerWarpsAPI.getInstance(api -> {
+            Warp provided = api.getPlayerWarp(warp.getWarpName(), player);
+            result.set(provided.isWarpLocked());
+        });
+
+        return result.get();
+    }
+
 }
