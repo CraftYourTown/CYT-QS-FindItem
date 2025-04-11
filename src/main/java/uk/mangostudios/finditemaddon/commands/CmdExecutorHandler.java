@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import uk.mangostudios.finditemaddon.FindItemAddOn;
 import uk.mangostudios.finditemaddon.config.ConfigManager;
+import uk.mangostudios.finditemaddon.external.PlayerWarpsHandler;
 import uk.mangostudios.finditemaddon.external.QuickShopHandler;
 import uk.mangostudios.finditemaddon.gui.ShopsGui;
 import uk.mangostudios.finditemaddon.gui.impl.ShopItem;
@@ -76,6 +77,7 @@ public class CmdExecutorHandler {
         ConfigManager.saveConfig();
         FindItemAddOn.initConfigProvider();
         QuickShopHandler.getInstance().reload();
+        PlayerWarpsHandler.updateAllWarpsFromAPI(); 
         commandSender.sendMessage(Colourify.colour("<green>Plugin reloaded!"));
     }
 }
