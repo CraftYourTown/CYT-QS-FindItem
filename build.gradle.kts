@@ -11,12 +11,12 @@ plugins {
 }
 
 group = "uk.mangostudios"
-version = "1.0.3"
+version = "1.0.4"
 description = "FindItemAddOn for QuickShop"
 
 bukkitPluginYaml {
     main = "uk.mangostudios.finditemaddon.FindItemAddOn"
-    apiVersion = "1.20"
+    apiVersion = "1.21"
     authors = listOf("myzticbean","lukemango")
     depend = listOf("QuickShop-Hikari", "PlayerWarps", "HeadDatabase", "Vault")
 }
@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     // Paper
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 
     // Cloud
     implementation("org.incendo:cloud-paper:2.0.0-beta.8")
