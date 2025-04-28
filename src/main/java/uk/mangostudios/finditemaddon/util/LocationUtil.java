@@ -1,9 +1,27 @@
+/**
+ * QSFindItemAddOn: An Minecraft add-on plugin for the QuickShop Hikari
+ * and Reremake Shop plugins for Spigot server platform.
+ * Copyright (C) 2021  myzticbean
+ * <p>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see https://www.gnu.org/licenses/.
+ */
 package uk.mangostudios.finditemaddon.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.WorldBorder;
 import org.jetbrains.annotations.Nullable;
 import uk.mangostudios.finditemaddon.FindItemAddOn;
 
@@ -13,197 +31,203 @@ import java.util.List;
 
 public class LocationUtil {
 
-    private static final List<Material> DAMAGING_BLOCKS = new ArrayList<>();
-    private static final List<Material> NON_SUFFOCATING_BLOCKS = new ArrayList<>();
-    private static final int MAX_SEARCH_RADIUS = 3; // Search within a 3-block radius
-    private static final int MAX_HEIGHT_CHECK = 5; // Check up to 5 blocks above/below
-    private static final int BELOW_SAFE_BLOCK_CHECK_LIMIT = 20; // Max depth to check for safe ground
+    private static final List<Material> damagingBlocks = new ArrayList<>();
+    private static final List<Material> nonSuffocatingBlocks = new ArrayList<>();
+    private static final int BELOW_SAFE_BLOCK_CHECK_LIMIT = 20;
 
     static {
-        // Initialize damaging blocks
-        DAMAGING_BLOCKS.addAll(Arrays.asList(
-                Material.LAVA, Material.CACTUS, Material.CAMPFIRE, Material.SOUL_CAMPFIRE,
-                Material.MAGMA_BLOCK, Material.FIRE, Material.SOUL_FIRE,
-                Material.SWEET_BERRY_BUSH, Material.WITHER_ROSE, Material.END_PORTAL
-        ));
+        // Initializing Damaging blocks
+        damagingBlocks.add(Material.LAVA);
+        damagingBlocks.add(Material.CACTUS);
+        damagingBlocks.add(Material.CAMPFIRE);
+        damagingBlocks.add(Material.SOUL_CAMPFIRE);
+        damagingBlocks.add(Material.MAGMA_BLOCK);
+        damagingBlocks.add(Material.FIRE);
+        damagingBlocks.add(Material.SOUL_FIRE);
+        damagingBlocks.add(Material.SWEET_BERRY_BUSH);
+        damagingBlocks.add(Material.WITHER_ROSE);
+        damagingBlocks.add(Material.END_PORTAL);
 
-        // Initialize non-suffocating blocks
-        NON_SUFFOCATING_BLOCKS.add(Material.AIR);
-        NON_SUFFOCATING_BLOCKS.addAll(Arrays.stream(Material.values())
-                .filter(m -> m.toString().toLowerCase().contains("_glass") ||
-                        m.toString().toLowerCase().contains("glass_pane") ||
-                        m.toString().toLowerCase().contains("_slab") ||
-                        m.toString().toLowerCase().contains("_sign") ||
-                        m.toString().toLowerCase().contains("_stairs")).toList());
-        NON_SUFFOCATING_BLOCKS.addAll(Arrays.asList(
-                Material.ACACIA_LEAVES, Material.BIRCH_LEAVES, Material.DARK_OAK_LEAVES,
-                Material.JUNGLE_LEAVES, Material.OAK_LEAVES, Material.SPRUCE_LEAVES,
-                Material.HONEY_BLOCK, Material.BELL, Material.CHEST, Material.TRAPPED_CHEST,
-                Material.HOPPER, Material.COMPOSTER, Material.GRINDSTONE, Material.STONECUTTER,
-                Material.IRON_BARS, Material.END_PORTAL_FRAME, Material.PISTON_HEAD
-        ));
-        NON_SUFFOCATING_BLOCKS.addAll(Arrays.asList(
-                Material.AZALEA_LEAVES, Material.FLOWERING_AZALEA_LEAVES
-        ));
+        // Initializing Non Suffocating blocks
+        nonSuffocatingBlocks.add(Material.AIR);
+        // Glass
+        nonSuffocatingBlocks.add(Material.GLASS);
+        nonSuffocatingBlocks.addAll(
+                new ArrayList<>(Arrays.stream(Material.values()).filter(p -> p.toString().toLowerCase().contains("_glass")).toList())
+        );
+        // Glass Panes
+        nonSuffocatingBlocks.addAll(
+                new ArrayList<>(Arrays.stream(Material.values()).filter(p -> p.toString().toLowerCase().contains("glass_pane")).toList())
+        );
+        // Leaves
+        nonSuffocatingBlocks.add(Material.ACACIA_LEAVES);
+        nonSuffocatingBlocks.add(Material.BIRCH_LEAVES);
+        nonSuffocatingBlocks.add(Material.DARK_OAK_LEAVES);
+        nonSuffocatingBlocks.add(Material.JUNGLE_LEAVES);
+        nonSuffocatingBlocks.add(Material.OAK_LEAVES);
+        nonSuffocatingBlocks.add(Material.SPRUCE_LEAVES);
+        if (Bukkit.getServer().getVersion().contains("1.17")) {
+            nonSuffocatingBlocks.add(Material.AZALEA_LEAVES);
+            nonSuffocatingBlocks.add(Material.FLOWERING_AZALEA_LEAVES);
+        }
+        // Slabs
+        nonSuffocatingBlocks.addAll(
+                new ArrayList<>(Arrays.stream(Material.values()).filter(p -> p.toString().toLowerCase().contains("_slab")).toList())
+        );
+        // Walled Signs
+        nonSuffocatingBlocks.addAll(
+                new ArrayList<>(Arrays.stream(Material.values()).filter(p -> p.toString().toLowerCase().contains("_sign")).toList())
+        );
+        // Stairs
+        nonSuffocatingBlocks.addAll(
+                new ArrayList<>(Arrays.stream(Material.values()).filter(p -> p.toString().toLowerCase().contains("_stairs")).toList())
+        );
+        // MISC
+        nonSuffocatingBlocks.add(Material.HONEY_BLOCK);
+        nonSuffocatingBlocks.add(Material.BELL);
+        nonSuffocatingBlocks.add(Material.CHEST);
+        nonSuffocatingBlocks.add(Material.TRAPPED_CHEST);
+        nonSuffocatingBlocks.add(Material.HOPPER);
+        nonSuffocatingBlocks.add(Material.COMPOSTER);
+        nonSuffocatingBlocks.add(Material.GRINDSTONE);
+        nonSuffocatingBlocks.add(Material.STONECUTTER);
+        nonSuffocatingBlocks.add(Material.IRON_BARS);
+        nonSuffocatingBlocks.add(Material.END_PORTAL_FRAME);
+        nonSuffocatingBlocks.add(Material.PISTON_HEAD);
+
     }
 
-    /**
-     * Finds a safe location around a shop where a player can be teleported.
-     * A safe location is one with a solid, non-damaging block below, and two blocks of non-suffocating space above.
-     * Searches within a 3D radius around the shop and adjusts the player's facing direction to look at the shop.
-     *
-     * @param shopLocation The location of the shop.
-     * @return A safe Location facing the shop, or null if no safe location is found.
-     */
     @Nullable
     public static Location findSafeLocationAroundShop(Location shopLocation) {
-        if (shopLocation == null || shopLocation.getWorld() == null) {
-            return null; // Invalid location or world
-        }
-
         Location roundedShopLoc = getRoundedDestination(shopLocation);
-        World world = roundedShopLoc.getWorld();
-        int centerX = roundedShopLoc.getBlockX();
-        int centerY = roundedShopLoc.getBlockY();
-        int centerZ = roundedShopLoc.getBlockZ();
-
-        // Search in a 3D radius around the shop
-        for (int dy = -MAX_HEIGHT_CHECK; dy <= MAX_HEIGHT_CHECK; dy++) {
-            for (int dx = -MAX_SEARCH_RADIUS; dx <= MAX_SEARCH_RADIUS; dx++) {
-                for (int dz = -MAX_SEARCH_RADIUS; dz <= MAX_SEARCH_RADIUS; dz++) {
-                    // Skip the shop's own location
-                    if (dx == 0 && dy == 0 && dz == 0) continue;
-
-                    int x = centerX + dx;
-                    int y = centerY + dy;
-                    int z = centerZ + dz;
-
-                    // Ensure the location is within world borders
-                    if (!isWithinWorldBorders(world, x, z)) continue;
-
-                    Location candidateLoc = new Location(world, x + 0.5, y, z + 0.5);
-                    if (isSafeLocation(candidateLoc)) {
-                        // Adjust the location to face the shop
-                        return lookAt(candidateLoc, roundedShopLoc);
+        // Creating a list of four block locations in 4 sides of the shop
+        List<Location> possibleSafeLocList = new ArrayList<>();
+        possibleSafeLocList.add(new Location(
+                roundedShopLoc.getWorld(),
+                roundedShopLoc.getX() + 1,
+                roundedShopLoc.getY(),
+                roundedShopLoc.getZ()
+        ));
+        possibleSafeLocList.add(new Location(
+                roundedShopLoc.getWorld(),
+                roundedShopLoc.getX() - 1,
+                roundedShopLoc.getY(),
+                roundedShopLoc.getZ()
+        ));
+        possibleSafeLocList.add(new Location(
+                roundedShopLoc.getWorld(),
+                roundedShopLoc.getX(),
+                roundedShopLoc.getY(),
+                roundedShopLoc.getZ() + 1
+        ));
+        possibleSafeLocList.add(new Location(
+                roundedShopLoc.getWorld(),
+                roundedShopLoc.getX(),
+                roundedShopLoc.getY(),
+                roundedShopLoc.getZ() - 1
+        ));
+        for (Location loc_i : possibleSafeLocList) {
+            if (loc_i.getBlock().getType().equals(FindItemAddOn.getQsApiInstance().getShopSignMaterial())) {
+                // check if the block above is suffocating
+                Location blockAbove = new Location(
+                        loc_i.getWorld(),
+                        loc_i.getBlockX(),
+                        loc_i.getBlockY() + 1,
+                        loc_i.getBlockZ());
+                if (!isBlockSuffocating(blockAbove)) {
+                    Location blockBelow = null;
+                    boolean safeLocFound = false;
+                    for (int i = 1; i <= BELOW_SAFE_BLOCK_CHECK_LIMIT; i++) {
+                        blockBelow = new Location(
+                                loc_i.getWorld(),
+                                loc_i.getBlockX(),
+                                loc_i.getBlockY() - i,
+                                loc_i.getBlockZ()
+                        );
+                        if (blockBelow.getBlock().getType().equals(Material.AIR)
+                                || blockBelow.getBlock().getType().equals(Material.CAVE_AIR)
+                                || blockBelow.getBlock().getType().equals(Material.VOID_AIR)
+                                || blockBelow.getBlock().getType().equals(FindItemAddOn.getQsApiInstance().getShopSignMaterial())) {
+                            continue;
+                        } else if (!isBlockDamaging(blockBelow)) {
+                            safeLocFound = true;
+                            break;
+                        } else {
+                            break;
+                        }
                     }
+                    if (safeLocFound) {
+                        loc_i = lookAt(getRoundedDestination(new Location(
+                                blockBelow.getWorld(),
+                                blockBelow.getX(),
+                                blockBelow.getY() + 1,
+                                blockBelow.getZ()
+                        )), roundedShopLoc);
+                        return loc_i;
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
                 }
             }
         }
-
-        // Fallback: Check directly above the shop
-        for (int dy = 1; dy <= MAX_HEIGHT_CHECK; dy++) {
-            Location candidateLoc = new Location(world, centerX + 0.5, centerY + dy, centerZ + 0.5);
-            if (isSafeLocation(candidateLoc)) {
-                return lookAt(candidateLoc, roundedShopLoc);
-            }
-        }
-
-        return null; // No safe location found
+        return null;
     }
 
-    /**
-     * Checks if a location is safe for a player to teleport to.
-     * A safe location has a non-damaging, solid block below and two blocks of non-suffocating space above.
-     *
-     * @param loc The location to check.
-     * @return True if the location is safe, false otherwise.
-     */
-    private static boolean isSafeLocation(Location loc) {
-        World world = loc.getWorld();
-        int x = loc.getBlockX();
-        int z = loc.getBlockZ();
-
-        // Check the two blocks where the player will stand (feet and head)
-        Location feetLoc = new Location(world, x, loc.getBlockY(), z);
-        Location headLoc = new Location(world, x, loc.getBlockY() + 1, z);
-
-        if (isBlockSuffocating(feetLoc) || isBlockSuffocating(headLoc)) {
-            return false; // Player would suffocate
-        }
-
-        // Check for a solid, non-damaging block below
-        Location belowLoc = null;
-        for (int i = 1; i <= BELOW_SAFE_BLOCK_CHECK_LIMIT; i++) {
-            belowLoc = new Location(world, x, loc.getBlockY() - i, z);
-            Material belowType = belowLoc.getBlock().getType();
-            if (belowType.isAir() || belowType == FindItemAddOn.getQsApiInstance().getShopSignMaterial()) {
-                continue; // Skip air or shop signs
-            }
-            if (isBlockDamaging(belowLoc)) {
-                return false; // Damaging block found
-            }
-            // Solid block found, check if it's safe
-            loc.setY(belowLoc.getY() + 1); // Adjust to stand on the block
-            return true;
-        }
-
-        return false; // No solid ground found within limit
-    }
-
-    /**
-     * Checks if a coordinate is within the world's borders.
-     *
-     * @param world The world to check.
-     * @param x     The X coordinate.
-     * @param z     The Z coordinate.
-     * @return True if within borders, false otherwise.
-     */
-    private static boolean isWithinWorldBorders(World world, int x, int z) {
-        WorldBorder border = world.getWorldBorder();
-        double size = border.getSize() / 2;
-        Location center = border.getCenter();
-        double minX = center.getX() - size;
-        double maxX = center.getX() + size;
-        double minZ = center.getZ() - size;
-        double maxZ = center.getZ() + size;
-        return x >= minX && x <= maxX && z >= minZ && z <= maxZ;
-    }
-
-    /**
-     * Adjusts a location's yaw and pitch to face another location.
-     *
-     * @param loc    The location to adjust.
-     * @param lookat The target location to face.
-     * @return The adjusted location.
-     */
+    // Found the below function from this thread: https://bukkit.org/threads/lookat-and-move-functions.26768/
     private static Location lookAt(Location loc, Location lookat) {
+        //Clone the loc to prevent applied changes to the input loc
         loc = loc.clone();
+
+        // Values of change in distance (make it relative)
         double dx = lookat.getX() - loc.getX();
         double dy = lookat.getY() - loc.getY();
         double dz = lookat.getZ() - loc.getZ();
 
+        // Set yaw
         if (dx != 0) {
-            loc.setYaw((float) (dx < 0 ? 1.5 * Math.PI : 0.5 * Math.PI));
-            loc.setYaw(loc.getYaw() - (float) Math.atan(dz / dx));
+            // Set yaw start value based on dx
+            if (dx < 0) {
+                loc.setYaw((float) (1.5 * Math.PI));
+            } else {
+                loc.setYaw((float) (0.5 * Math.PI));
+            }
+            loc.setYaw((float) loc.getYaw() - (float) Math.atan(dz / dx));
         } else if (dz < 0) {
             loc.setYaw((float) Math.PI);
         }
 
-        double dxz = Math.sqrt(dx * dx + dz * dz);
+        // Get the distance from dx/dz
+        double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+
+        // Set pitch
         loc.setPitch((float) -Math.atan(dy / dxz));
 
+        // Set values, convert to degrees (invert the yaw since Bukkit uses a different yaw dimension format)
         loc.setYaw(-loc.getYaw() * 180f / (float) Math.PI);
         loc.setPitch(loc.getPitch() * 180f / (float) Math.PI);
+
         return loc;
     }
 
     private static boolean isBlockDamaging(Location loc) {
-        return DAMAGING_BLOCKS.contains(loc.getBlock().getType());
+        return damagingBlocks.contains(loc.getBlock().getType());
     }
 
     private static boolean isBlockSuffocating(Location loc) {
-        return !NON_SUFFOCATING_BLOCKS.contains(loc.getBlock().getType());
+        return !nonSuffocatingBlocks.contains(loc.getBlock().getType());
     }
 
-    private static Location getRoundedDestination(Location loc) {
+    private static Location getRoundedDestination(final Location loc) {
         World world = loc.getWorld();
         int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         int z = loc.getBlockZ();
-        return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
+        return new Location(world, (double) x + 0.5D, (double) y, (double) z + 0.5D, loc.getYaw(), loc.getPitch());
     }
 
-    public static double calculateDistance3D(double x1, double y1, double z1, double x2, double y2, double z2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+    public static Double calculateDistance3D(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return Math.pow((Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2)), 0.5);
     }
 }
