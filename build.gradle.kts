@@ -78,7 +78,7 @@ tasks {
             "com.github.KodySimpson",
             "dev.triumphteam"
         ).forEach {
-            relocate(it, "io.myzticbean.finditemaddon.lib.$it")
+            relocate(it, "uk.mangostudios.finditemaddon.lib.$it")
         }
     }
     processResources {

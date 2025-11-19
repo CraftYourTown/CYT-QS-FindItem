@@ -11,7 +11,6 @@ import uk.mangostudios.finditemaddon.FindItemAddOn;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * Utility class for handling location-related operations in the FindItemAddOn plugin.

@@ -122,7 +122,12 @@ public class ShopsGui {
     }
 
     public static void open(Player player, String matcher, List<ShopItem> searchResultList) {
-        CompletableFuture.supplyAsync(() -> new ShopsGui(player, matcher, searchResultList)).thenAccept(gui -> gui.gui.open(player));
+        CompletableFuture.supplyAsync(() -> new ShopsGui(player, matcher, searchResultList)).thenAccept(gui ->
+                Bukkit.getScheduler().runTask(FindItemAddOn.getInstance(), () -> gui.gui.open(player))
+        ).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
+        });
     }
 
     private @Nullable Warp getNearestWarp(UUID shopOwner, Location location) {
