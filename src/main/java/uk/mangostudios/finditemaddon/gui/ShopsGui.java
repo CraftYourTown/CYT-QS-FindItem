@@ -19,6 +19,7 @@ import uk.mangostudios.finditemaddon.cache.HiddenShopsCache;
 import uk.mangostudios.finditemaddon.gui.impl.ShopItem;
 import uk.mangostudios.finditemaddon.listener.HeadDatabaseApiListener;
 import uk.mangostudios.finditemaddon.util.Colourify;
+import uk.mangostudios.finditemaddon.util.ItemUtil;
 import uk.mangostudios.finditemaddon.util.LocationUtil;
 import uk.mangostudios.finditemaddon.util.PlayerWarpsUtil;
 
@@ -37,22 +38,22 @@ public class ShopsGui {
 
     public ShopsGui(Player player, String matcher, List<ShopItem> searchResultList) {
         // Set the title
-        gui.updateTitle(LegacyComponentSerializer.legacySection().serialize(
+        gui.updateTitle(
                 Colourify.colour(
                         FindItemAddOn.getConfigProvider().SHOP_SEARCH_GUI_TITLE.replace("<matcher>", matcher)
-                )));
+                ));
 
         // Add the buttons
         gui.setItem(6, 1,
-                ItemBuilder.from(this.getMaterial(FindItemAddOn.getConfigProvider().SHOP_GUI_BACK_BUTTON_MATERIAL))
+                ItemBuilder.from(ItemUtil.get(FindItemAddOn.getConfigProvider().SHOP_GUI_BACK_BUTTON_MATERIAL))
                         .name(Colourify.colour(FindItemAddOn.getConfigProvider().SHOP_GUI_BACK_BUTTON_TEXT))
                         .asGuiItem(event -> gui.previous()));
         gui.setItem(6, 9,
-                ItemBuilder.from(this.getMaterial(FindItemAddOn.getConfigProvider().SHOP_GUI_NEXT_BUTTON_MATERIAL))
+                ItemBuilder.from(ItemUtil.get(FindItemAddOn.getConfigProvider().SHOP_GUI_NEXT_BUTTON_MATERIAL))
                         .name(Colourify.colour(FindItemAddOn.getConfigProvider().SHOP_GUI_NEXT_BUTTON_TEXT))
                         .asGuiItem(event -> gui.next()));
         gui.setItem(6, 5,
-                ItemBuilder.from(this.getMaterial(FindItemAddOn.getConfigProvider().SHOP_GUI_CLOSE_BUTTON_MATERIAL))
+                ItemBuilder.from(ItemUtil.get(FindItemAddOn.getConfigProvider().SHOP_GUI_CLOSE_BUTTON_MATERIAL))
                         .name(Colourify.colour(FindItemAddOn.getConfigProvider().SHOP_GUI_CLOSE_BUTTON_TEXT))
                         .asGuiItem(event -> gui.close(event.getWhoClicked())));
 
@@ -132,14 +133,6 @@ public class ShopsGui {
 
     private @Nullable Warp getNearestWarp(UUID shopOwner, Location location) {
         return new PlayerWarpsUtil().findNearestWarp(location, shopOwner);
-    }
-
-    private ItemStack getMaterial(String material) {
-        try {
-            return new ItemStack(Material.valueOf(material));
-        } catch (IllegalArgumentException e) {
-            return HeadDatabaseApiListener.getInstance().getApi().getItemHead(material.replace("hdb-", ""));
-        }
     }
 
 }

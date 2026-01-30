@@ -1,4 +1,4 @@
-api-version: '1.20'
+api-version: '1.21'
 name: QSFindItemAddOn
 version: 1.0.3
 main: uk.mangostudios.finditemaddon.FindItemAddOn

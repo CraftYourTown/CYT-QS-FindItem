@@ -16,7 +16,7 @@ description = "FindItemAddOn for QuickShop"
 
 bukkitPluginYaml {
     main = "uk.mangostudios.finditemaddon.FindItemAddOn"
-    apiVersion = "1.20"
+    apiVersion = "1.21"
     authors = listOf("myzticbean","lukemango")
     depend = listOf("QuickShop-Hikari", "PlayerWarps", "HeadDatabase", "Vault")
 }
@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     // Paper
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     // Cloud
     implementation("org.incendo:cloud-paper:2.0.0-beta.8")
@@ -50,13 +50,13 @@ dependencies {
     compileOnly("com.ghostchu:quickshop-api:6.2.0.5")
 
     // TriumphGui
-    implementation("dev.triumphteam:triumph-gui:3.1.10") { exclude("net.kyori") }
+    implementation("dev.triumphteam:triumph-gui:3.1.13")
 
     // Head Database
     compileOnly("com.arcaniax:HeadDatabase-API:1.3.2")
 
     // Vault
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
 }
 
 indra {

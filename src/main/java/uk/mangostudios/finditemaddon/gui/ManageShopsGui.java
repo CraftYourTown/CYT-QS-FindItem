@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import uk.mangostudios.finditemaddon.FindItemAddOn;
 import uk.mangostudios.finditemaddon.cache.HiddenShopsCache;
 import uk.mangostudios.finditemaddon.external.QuickShopHandler;
-import uk.mangostudios.finditemaddon.listener.HeadDatabaseApiListener;
 import uk.mangostudios.finditemaddon.util.Colourify;
+import uk.mangostudios.finditemaddon.util.ItemUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,20 +34,24 @@ public class ManageShopsGui {
     public ManageShopsGui(Player player) {
         // Add the buttons
         gui.setItem(6, 1,
-                ItemBuilder.from(this.getMaterial(FindItemAddOn.getConfigProvider().SHOP_GUI_BACK_BUTTON_MATERIAL))
+                ItemBuilder.from(ItemUtil.get(FindItemAddOn.getConfigProvider().SHOP_GUI_BACK_BUTTON_MATERIAL))
                         .name(Colourify.colour(FindItemAddOn.getConfigProvider().SHOP_GUI_BACK_BUTTON_TEXT))
                         .asGuiItem(event -> gui.previous()));
         gui.setItem(6, 9,
-                ItemBuilder.from(this.getMaterial(FindItemAddOn.getConfigProvider().SHOP_GUI_NEXT_BUTTON_MATERIAL))
+                ItemBuilder.from(ItemUtil.get(FindItemAddOn.getConfigProvider().SHOP_GUI_NEXT_BUTTON_MATERIAL))
                         .name(Colourify.colour(FindItemAddOn.getConfigProvider().SHOP_GUI_NEXT_BUTTON_TEXT))
                         .asGuiItem(event -> gui.next()));
         gui.setItem(6, 5,
-                ItemBuilder.from(this.getMaterial(FindItemAddOn.getConfigProvider().SHOP_GUI_CLOSE_BUTTON_MATERIAL))
+                ItemBuilder.from(ItemUtil.get(FindItemAddOn.getConfigProvider().SHOP_GUI_CLOSE_BUTTON_MATERIAL))
                         .name(Colourify.colour(FindItemAddOn.getConfigProvider().SHOP_GUI_CLOSE_BUTTON_TEXT))
                         .asGuiItem(event -> gui.close(event.getWhoClicked())));
 
-        gui.setItem(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8), ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).name(Colourify.colour(" ")).asGuiItem());
-        gui.setItem(List.of(46, 47, 48, 50, 51, 52), ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).name(Colourify.colour(" ")).asGuiItem());
+        gui.setItem(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8),
+                new GuiItem(Material.BLACK_STAINED_GLASS_PANE)
+        );
+        gui.setItem(List.of(46, 47, 48, 50, 51, 52),
+                new GuiItem(Material.BLACK_STAINED_GLASS_PANE)
+        );
 
         // Add the items
         Map<GuiItem, Integer> items = new HashMap<>(); // GuiItem, Distance
@@ -118,13 +122,5 @@ public class ManageShopsGui {
 
     public static void open(Player player) {
         CompletableFuture.supplyAsync(() -> new ManageShopsGui(player)).thenAccept(gui -> gui.gui.open(player));
-    }
-
-    private ItemStack getMaterial(String material) {
-        try {
-            return new ItemStack(Material.valueOf(material));
-        } catch (IllegalArgumentException e) {
-            return HeadDatabaseApiListener.getInstance().getApi().getItemHead(material.replace("hdb-", ""));
-        }
     }
 }
