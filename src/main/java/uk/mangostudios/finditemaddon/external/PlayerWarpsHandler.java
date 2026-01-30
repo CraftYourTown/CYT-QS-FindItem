@@ -68,9 +68,7 @@ public class PlayerWarpsHandler {
         // Issue #21 Fix: Adding a NPE check
         if (allWarpsList != null) {
             if (isRemoved) {
-                if (allWarpsList.contains(warp)) {
-                    allWarpsList.remove(warp);
-                }
+                allWarpsList.remove(warp);
             } else {
                 allWarpsList.add(warp);
             }

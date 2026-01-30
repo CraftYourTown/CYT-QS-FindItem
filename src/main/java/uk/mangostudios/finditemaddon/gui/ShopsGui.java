@@ -107,9 +107,8 @@ public class ShopsGui {
                         if (PlayerWarpsUtil.isWarpLocked(nearestWarp, player) ) return; 
                         if (nearestWarp != null) {
                             final WVisit warpVisit = nearestWarp.getWarpVisit();
-                            if (!warpVisit.getWarpVisited().contains(player.getUniqueId())) {
-                                warpVisit.getWarpVisited().add(player.getUniqueId());
-                                warpVisit.setWarpVisits(warpVisit.getWarpVisits() + 1, warpVisit.getPurgedWarpVisits() + 1);
+                            if (!warpVisit.getWarpVisited().containsKey(player.getUniqueId())) {
+                                warpVisit.addWarpVisited(player.getUniqueId());
                             }
                         }
                         

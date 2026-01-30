@@ -41,7 +41,7 @@ dependencies {
     implementation("org.incendo:cloud-annotations:2.0.0-rc.2")
 
     // PlayerWarps
-    compileOnly("com.olziedev:playerwarps-api:6.30.0")
+    //compileOnly("com.olziedev:playerwarps-api:7.9.0")
 
     // QuickShop-Hikari
     compileOnly("com.ghostchu:quickshop-bukkit:6.2.0.5")
@@ -57,6 +57,8 @@ dependencies {
 
     // Vault
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
+
+    compileOnly(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }
 
 indra {
