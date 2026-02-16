@@ -36,7 +36,15 @@ public class HiddenShopsCache {
     public void hideAllShops(Player player) {
         QuickShopHandler.getInstance().getAllShopsFor(player).forEach(shop -> {
             if (!(shop.getOwner().getUniqueId() == player.getUniqueId())) return;
-            hiddenShops.computeIfAbsent(player.getUniqueId(), k -> new ArrayList<>()).add(new FinePosition(shop.getLocation().getX(), shop.getLocation().getY(), shop.getLocation().getZ(), shop.getLocation().getWorld().getName()));
+            hiddenShops.computeIfAbsent(player.getUniqueId(),
+                            k -> new ArrayList<>())
+                    .add(new FinePosition(
+                                    shop.getLocation().getX(),
+                                    shop.getLocation().getY(),
+                                    shop.getLocation().getZ(),
+                                    shop.getLocation().getWorld().getName()
+                            )
+                    );
         });
         player.sendMessage(Colourify.colour(FindItemAddOn.getConfigProvider().PLUGIN_PREFIX + FindItemAddOn.getConfigProvider().HIDDEN_ALL_SHOPS_MSG));
     }

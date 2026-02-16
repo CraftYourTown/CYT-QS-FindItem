@@ -44,10 +44,10 @@ dependencies {
     //compileOnly("com.olziedev:playerwarps-api:7.9.0")
 
     // QuickShop-Hikari
-    compileOnly("com.ghostchu:quickshop-bukkit:6.2.0.5")
+    compileOnly("com.ghostchu:quickshop-bukkit:6.2.0.11")
 
     // QuickShop-API
-    compileOnly("com.ghostchu:quickshop-api:6.2.0.5")
+    compileOnly("com.ghostchu:quickshop-api:6.2.0.11")
 
     // TriumphGui
     implementation("dev.triumphteam:triumph-gui:3.1.13")

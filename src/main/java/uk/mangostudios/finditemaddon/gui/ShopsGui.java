@@ -7,7 +7,6 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,7 +16,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import uk.mangostudios.finditemaddon.FindItemAddOn;
 import uk.mangostudios.finditemaddon.cache.HiddenShopsCache;
 import uk.mangostudios.finditemaddon.gui.impl.ShopItem;
-import uk.mangostudios.finditemaddon.listener.HeadDatabaseApiListener;
 import uk.mangostudios.finditemaddon.util.Colourify;
 import uk.mangostudios.finditemaddon.util.ItemUtil;
 import uk.mangostudios.finditemaddon.util.LocationUtil;
@@ -57,8 +55,8 @@ public class ShopsGui {
                         .name(Colourify.colour(FindItemAddOn.getConfigProvider().SHOP_GUI_CLOSE_BUTTON_TEXT))
                         .asGuiItem(event -> gui.close(event.getWhoClicked())));
 
-        gui.setItem(List.of(0,1,2,3,4,5,6,7,8), ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).name(Colourify.colour(" ")).asGuiItem());
-        gui.setItem(List.of(46,47,48,50,51,52), ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).name(Colourify.colour(" ")).asGuiItem());
+        gui.setItem(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8), ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).name(Colourify.colour(" ")).asGuiItem());
+        gui.setItem(List.of(46, 47, 48, 50, 51, 52), ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).name(Colourify.colour(" ")).asGuiItem());
 
         // Add the items
         searchResultList.forEach(shopItem -> {
@@ -85,8 +83,8 @@ public class ShopsGui {
                         .replace("<cost>", String.valueOf(costToSearch))
                         .replace("<location>",
                                 "X: " + shopItem.shopLocation().getBlockX()
-                                 + ", Y: " + shopItem.shopLocation().getBlockY()
-                                 + ", Z: " + shopItem.shopLocation().getBlockZ())
+                                        + ", Y: " + shopItem.shopLocation().getBlockY()
+                                        + ", Z: " + shopItem.shopLocation().getBlockZ())
                         .replace("<world>", shopItem.shopLocation().getWorld().getName())
                         .replace("<warp>", nearestWarp == null ? "No warp found" : nearestWarp.getWarpDisplayName()));
             }
@@ -104,14 +102,14 @@ public class ShopsGui {
                         }
 
                         if (PlayerWarpsUtil.isPlayerBanned(nearestWarp, player)) return;
-                        if (PlayerWarpsUtil.isWarpLocked(nearestWarp, player) ) return; 
+                        if (PlayerWarpsUtil.isWarpLocked(nearestWarp, player)) return;
                         if (nearestWarp != null) {
                             final WVisit warpVisit = nearestWarp.getWarpVisit();
                             if (!warpVisit.getWarpVisited().containsKey(player.getUniqueId())) {
                                 warpVisit.addWarpVisited(player.getUniqueId());
                             }
                         }
-                        
+
                         player.closeInventory();
 
                         Location safeLocationAroundShop = LocationUtil.findSafeLocationAroundShop(shopItem.shopLocation());
