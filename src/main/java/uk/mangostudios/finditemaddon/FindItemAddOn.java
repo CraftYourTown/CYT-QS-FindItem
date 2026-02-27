@@ -31,6 +31,7 @@ import uk.mangostudios.finditemaddon.commands.impl.HideAllShopsCommand;
 import uk.mangostudios.finditemaddon.commands.impl.HideShopCommands;
 import uk.mangostudios.finditemaddon.commands.impl.ReloadCommand;
 import uk.mangostudios.finditemaddon.commands.impl.SellCommand;
+import uk.mangostudios.finditemaddon.commands.impl.ViewAllCommand;
 import uk.mangostudios.finditemaddon.config.ConfigManager;
 import uk.mangostudios.finditemaddon.config.ConfigProvider;
 import uk.mangostudios.finditemaddon.external.PlayerWarpsHandler;
@@ -92,6 +93,7 @@ public final class FindItemAddOn extends JavaPlugin {
         commandManager.registerCommand(
                 new BuyCommand(cmdExecutorHandler),
                 new SellCommand(cmdExecutorHandler),
+                new ViewAllCommand(),
                 new ReloadCommand(cmdExecutorHandler),
                 new HideShopCommands(),
                 new HideAllShopsCommand(),

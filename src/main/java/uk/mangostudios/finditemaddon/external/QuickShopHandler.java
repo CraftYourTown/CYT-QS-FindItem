@@ -57,6 +57,14 @@ public class QuickShopHandler {
     private final Cache<String, List<ShopItem>> searchedStringsToSell = CacheBuilder.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
+    // Cache for full "view all" lists (separately for buy/sell), small TTL to keep reasonably fresh
+    private final Cache<String, List<ShopItem>> allShopsCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(5, TimeUnit.MINUTES)
+            .build();
+    // Cache for underlying Shop objects filtered for view-all (buy/sell)
+    private final Cache<String, List<com.ghostchu.quickshop.api.shop.Shop>> allShopsShopCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(5, TimeUnit.MINUTES)
+            .build();
 
     private static QuickShopHandler instance;
 
@@ -70,6 +78,58 @@ public class QuickShopHandler {
         this.searchedStringsToBuy.invalidateAll();
         this.searchedItemStacksToSell.invalidateAll();
         this.searchedStringsToSell.invalidateAll();
+        this.allShopsCache.invalidateAll();
+        this.allShopsShopCache.invalidateAll();
+    }
+
+    /**
+     * Returns a cached list of ShopItem representing all shops for the given buy/sell mode.
+     * The returned list is pre-filtered to exclude blacklisted worlds and shops with zero stock/space.
+     * It does not perform per-player checks (permissions, hidden shops, warp locks) — caller must filter those.
+     */
+    public List<ShopItem> getAllShopItems(boolean toBuy) {
+        final String key = toBuy ? "buy" : "sell";
+        List<ShopItem> cached = allShopsCache.getIfPresent(key);
+        if (cached != null) return cached;
+
+        // Build list (ensure QuickShop internals are accessed on correct thread)
+        Util.ensureThread(true);
+        List<ShopItem> shopsFoundList = new ArrayList<>();
+        List<com.ghostchu.quickshop.api.shop.Shop> allShops = getAllShops();
+        for (com.ghostchu.quickshop.api.shop.Shop shopIterator : allShops) {
+            // skip blacklisted worlds
+            if (FindItemAddOn.getConfigProvider().getBlacklistedWorlds().contains(shopIterator.getLocation().getWorld())) {
+                continue;
+            }
+            if ((toBuy ? shopIterator.isSelling() : shopIterator.isBuying())) {
+                int stockOrSpace = (toBuy ? shopIterator.getRemainingStock() : shopIterator.getRemainingSpace());
+                if (stockOrSpace == 0) {
+                    continue;
+                }
+
+                // ensure shop owner has enough balance to sell the item (if selling)
+                OfflinePlayer shopOwner = Bukkit.getOfflinePlayer(shopIterator.getOwner().getUniqueId());
+                if (!toBuy && !FindItemAddOn.getInstance().getEconomy().has(shopOwner, shopIterator.getPrice())) {
+                    continue;
+                }
+
+                shopsFoundList.add(new ShopItem(
+                        shopIterator.getPrice(),
+                        QuickShopHandler.processStockOrSpace(stockOrSpace),
+                        shopIterator.getOwner().getUniqueIdOptional().orElse(new UUID(0, 0)),
+                        shopIterator.getLocation(),
+                        shopIterator.getItem(),
+                        toBuy,
+                        PlainTextComponentSerializer.plainText().serialize(shopIterator.getItem().displayName()).toLowerCase()
+                ));
+            }
+        }
+
+        // Sort alphabetically by item display name
+        shopsFoundList.sort(Comparator.comparing(ShopItem::itemName));
+
+        allShopsCache.put(key, shopsFoundList);
+        return shopsFoundList;
     }
 
     public List<ShopItem> findItemBasedOnTypeFromAllShops(ItemStack item, boolean toBuy, Player searchingPlayer) {
@@ -108,7 +168,8 @@ public class QuickShopHandler {
                         shopIterator.getOwner().getUniqueIdOptional().orElse(new UUID(0, 0)),
                         shopIterator.getLocation(),
                         shopIterator.getItem(),
-                        toBuy
+                        toBuy,
+                        PlainTextComponentSerializer.plainText().serialize(shopIterator.getItem().displayName()).toLowerCase()
                 ));
             }
         }
@@ -157,7 +218,8 @@ public class QuickShopHandler {
                         shopIterator.getOwner().getUniqueIdOptional().orElse(new UUID(0, 0)),
                         shopIterator.getLocation(),
                         shopIterator.getItem(),
-                        toBuy
+                        toBuy,
+                        PlainTextComponentSerializer.plainText().serialize(shopIterator.getItem().displayName()).toLowerCase()
                 ));
             }
         }
@@ -220,6 +282,39 @@ public class QuickShopHandler {
     private int getRemainingStockOrSpaceFromShopCache(com.ghostchu.quickshop.api.shop.Shop shop, boolean fetchRemainingStock) {
         Util.ensureThread(true);
         return (fetchRemainingStock ? shop.getRemainingStock() : shop.getRemainingSpace());
+    }
+
+    /**
+     * Returns cached list of QuickShop Shop objects pre-filtered for buy/sell mode.
+     * Caller can perform per-player checks (playerAuthorize, hidden shops, warp locks) as needed.
+     */
+    public List<com.ghostchu.quickshop.api.shop.Shop> getAllShopsFiltered(boolean toBuy) {
+        final String key = toBuy ? "buy-shops" : "sell-shops";
+        List<com.ghostchu.quickshop.api.shop.Shop> cached = allShopsShopCache.getIfPresent(key);
+        if (cached != null) return cached;
+
+        // Build list (ensure QuickShop internals accessed on correct thread)
+        Util.ensureThread(true);
+        List<com.ghostchu.quickshop.api.shop.Shop> shops = new ArrayList<>();
+        List<com.ghostchu.quickshop.api.shop.Shop> allShops = getAllShops();
+        for (com.ghostchu.quickshop.api.shop.Shop shopIterator : allShops) {
+            if (FindItemAddOn.getConfigProvider().getBlacklistedWorlds().contains(shopIterator.getLocation().getWorld())) {
+                continue;
+            }
+            if ((toBuy ? shopIterator.isSelling() : shopIterator.isBuying())) {
+                int stockOrSpace = (toBuy ? shopIterator.getRemainingStock() : shopIterator.getRemainingSpace());
+                if (stockOrSpace == 0) continue;
+
+                // ensure shop owner has enough balance to sell the item (if selling)
+                OfflinePlayer shopOwner = Bukkit.getOfflinePlayer(shopIterator.getOwner().getUniqueId());
+                if (!toBuy && !FindItemAddOn.getInstance().getEconomy().has(shopOwner, shopIterator.getPrice())) continue;
+
+                shops.add(shopIterator);
+            }
+        }
+
+        allShopsShopCache.put(key, shops);
+        return shops;
     }
 
     static List<ShopItem> sortShops(int sortingMethod, List<ShopItem> shopsFoundList, boolean toBuy) {

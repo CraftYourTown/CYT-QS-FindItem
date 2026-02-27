@@ -20,8 +20,9 @@ package uk.mangostudios.finditemaddon.gui.impl;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record ShopItem(double shopPrice, int remainingStockOrSpace, UUID shopOwner, Location shopLocation, ItemStack item, boolean toBuy) {
+public record ShopItem(double shopPrice, int remainingStockOrSpace, UUID shopOwner, Location shopLocation, ItemStack item, boolean toBuy, @NotNull String itemName) {
 }
